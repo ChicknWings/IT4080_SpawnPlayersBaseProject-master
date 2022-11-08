@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 7840382981253291753}
   - component: {fileID: 7840382981253291752}
   - component: {fileID: 7312521356730375878}
-  - component: {fileID: 359904930785472533}
+  - component: {fileID: 3237619542840702259}
   m_Layer: 0
   m_Name: DamageBoost
   m_TagString: DamageBoost
@@ -115,7 +115,7 @@ Rigidbody:
   m_Interpolate: 0
   m_Constraints: 14
   m_CollisionDetection: 0
---- !u!114 &359904930785472533
+--- !u!114 &3237619542840702259
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}

@@ -67,7 +67,6 @@ public class Player : NetworkBehaviour {
         if (IsHost) {
             if (other.gameObject.CompareTag("DamageBoost")) {
                 HostHandleDamageBoostPickup(other);
-            
             }
         
         }
@@ -90,12 +89,20 @@ public class Player : NetworkBehaviour {
         }
     }
 
+    private void HostHandleDeath() 
+    {
+        if (Score.Value <= 0) {
+            this.GetComponent<NetworkObject>().Despawn();
+        }
+    }
+
 
     public void OnCollisionEnter(Collision collision)
     {
         if (IsHost) {
             if (collision.gameObject.CompareTag("Bullet")) {
                 HostHandleBulletCollision(collision.gameObject);
+                HostHandleDeath();
             }
         }
     }
@@ -147,4 +154,6 @@ public class Player : NetworkBehaviour {
     public void DisplayScore() {
         txtScoreDisplay.text = Score.Value.ToString();
     }
+
+
 }
