@@ -61,6 +61,12 @@ public class ChatUI : NetworkBehaviour {
         }
     }
 
+    public void SendSystemMessage(string msg) {
+        if (IsHost) {
+            SendChatMessageClientRpc(msg, SYSTEM_ID);
+        }
+    }
+
     //--------------------------
     // Events
     //--------------------------

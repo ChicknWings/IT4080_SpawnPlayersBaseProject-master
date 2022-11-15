@@ -52,7 +52,5 @@ public class GameManager : NetworkBehaviour {
             //players.Add(playerSpawn);
            
         }
-    
-    
     }
 }

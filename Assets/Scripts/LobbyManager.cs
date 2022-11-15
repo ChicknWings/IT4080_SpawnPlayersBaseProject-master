@@ -33,21 +33,28 @@ public class LobbyManager : NetworkBehaviour
     }
 
     public override void OnNetworkSpawn() {
-        if (IsHost) {
+        if (IsHost)
+        {
             NetworkManager.Singleton.OnClientConnectedCallback += HostOnClientConnected;
             btnReady.gameObject.SetActive(false);
 
             int myIndex = GameData.Instance.FindPlayerIndex(NetworkManager.LocalClientId);
-            if(myIndex != -1) {
+            if (myIndex != -1)
+            {
                 PlayerInfo info = GameData.Instance.allPlayers[myIndex];
                 info.isReady = true;
                 GameData.Instance.allPlayers[myIndex] = info;
             }
         }
-
-        if (IsClient && !IsHost) {
+        else {
             btnStart.gameObject.SetActive(false);
+            NetworkManager.Singleton.OnClientDisconnectCallback += ClientOnDisconnect;
+        
         }
+
+ //       if (IsClient && !IsHost) {
+ //           btnStart.gameObject.SetActive(false);
+ //       }
 
         txtPlayerNumber.text = $"Player #{NetworkManager.LocalClientId}";
         GameData.Instance.allPlayers.OnListChanged += ClientOnAllPlayersChanged;
@@ -68,7 +75,18 @@ public class LobbyManager : NetworkBehaviour
         newPanel.SetName($"Player {info.clientId.ToString()}");
         newPanel.SetColor(info.color);
         newPanel.SetReady(info.isReady);
+        //newPanel.ShowKick(IsHost && info.clientId != NetworkManager.Singleton.LocalClientId);
+        newPanel.OnKickPlayer += delegate
+        {
+            OnPlayerKicked(info.clientId);
+        };
         playerPanels.Add(newPanel);
+    }
+
+    private void OnPlayerKicked(ulong clientId) {
+        //chat.SendSystemMessage($"The host has kicked player {clientId}");
+        NetworkManager.Singleton.DisconnectClient(clientId);
+        //GameData.Instance.RemovePlayerFromList(clientId);
     }
 
     private void RefreshPlayerPanels() {
@@ -116,6 +134,10 @@ public class LobbyManager : NetworkBehaviour
 
     private void ClientOnReadyClicked() {
         ToggleReadyServerRpc();
+    }
+
+    private void ClientOnDisconnect(ulong clientId) {
+        SceneManager.LoadScene("Main");
     }
 
 
